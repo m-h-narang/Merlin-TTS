@@ -1,43 +1,79 @@
-Download Merlin
----------------
+# Merlin TTS on Hábrók — Speech Synthesis
 
-Step 1: git clone https://github.com/CSTR-Edinburgh/merlin.git 
+This project customizes the Merlin TTS implementation for training and inference on the Hábrók cluster as part of the Voice Technology MSc. 2024–2025 Speech Synthesis 2 course.
 
-Install tools
--------------
+---
 
-Step 2: cd merlin/tools <br/>
-Step 3: ./compile_tools.sh
+## Original Repository
 
-Demo voice
-----------
+The full codebase can be obtained by cloning the official Merlin repository:
 
-To run demo voice, please follow below steps:
- 
-Step 4: cd merlin/egs/slt_arctic/s1 <br/>
-Step 5: ./run_demo.sh
+https://github.com/CSTR-Edinburgh/merlin
 
-Demo voice trains only on 50 utterances and shouldn't take more than 5 min. 
+---
 
-Compare the results in log files to baseline results from demo data in [RESULTS.md](https://github.com/CSTR-Edinburgh/merlin/blob/master/egs/slt_arctic/s1/RESULTS.md)
+## Project Description
 
-Full voice
-----------
+This project focuses on training and fine-tuning the Merlin TTS system for statistical parametric speech synthesis using the CMU Arctic bdl dataset. It includes tasks such as:
 
-To run full voice, please follow below steps:
+- Training a “full voice” using the standard Merlin recipe on the CMU Arctic bdl dataset
+- Running inference to synthesize test sentences from the trained model
+- Experimenting with different feedforward network architectures for the acoustic model to observe the impact of the number of hidden layers and hidden units
+- Comparing model performance using metrics such as MCD, BAP, V/UV error rates, and RMSE of log-f0
 
-Step 6: cd merlin/egs/slt_arctic/s1 <br/>
-Step 7: ./run_full_voice.sh
+---
 
-Full voice utilizes the whole arctic data (1132 utterances). The training of the voice approximately takes 1 to 2 hours. 
+## What This Repository Contains
 
-Compare the results in log files to baseline results from full data in [RESULTS.md](https://github.com/CSTR-Edinburgh/merlin/blob/master/egs/slt_arctic/s1/RESULTS.md)
+This folder only includes modified or newly created files relevant to the project.
+To access the complete codebase, clone the repository from the link above.
 
-Generate new sentences
-----------------------
+Key changes in this project include:
 
-To generate new sentences, please follow below steps:
+- Adjustments for running Merlin in a containerized environment on Hábrók
+- Scripts for training the full voice model on the CMU Arctic bdl dataset
+- Configurations for training multiple acoustic model architectures for comparison
+- Generated synthesis outputs for each experimental setup
 
-Step 8: Run either demo voice or full voice. <br/>
-Step 9: ./merlin_synthesis.sh
+---
 
+## How to Run
+
+1. Clone the Original Repository
+
+```bash
+git clone https://github.com/CSTR-Edinburgh/merlin.git
+cd merlin
+```
+
+2. Compile Tools
+
+```bash
+bash tools/compile_tools.sh
+```
+
+3. Start Container on Hábrók (bind Merlin directory and enable GPU)
+
+```bash
+apptainer shell --nv --bind <PATH_TO_YOUR_MERLIN>:/merlin merlin-tts_Habrok_tutorial.sif
+```
+
+4. Train the Full Voice
+
+```bash
+bash egs/cmu_arctic/s1/run_full_voice.sh
+```
+
+5. Perform Inference
+
+Synthesized waveforms will be generated in the experiment’s test_synthesis/wav folder after training.
+
+6. Experiment with Acoustic Model Architectures
+
+Modify the number of hidden layers and units in the configuration files and retrain using the same dataset and recipe to compare model performance.
+
+---
+
+## Language
+
+The project was developed using the CMU Arctic bdl dataset for English speech synthesis.
